@@ -1,7 +1,5 @@
 """nautilus-folder-yaml 的单测。运行：python3 -m unittest discover -s tests"""
 
-import io
-import json
 import os
 import sys
 import tempfile
@@ -350,7 +348,6 @@ class LanguageTests(unittest.TestCase):
         self.assertEqual(columns[0].kwargs['label'], 'desc')
 
     def test_locale_detection(self):
-        import importlib
         for value, expected in (('zh_CN.UTF-8', True), ('en_US.UTF-8', False),
                                 ('C', False)):
             self.assertEqual(plugin._is_zh(value), expected)
