@@ -1,5 +1,9 @@
 # 版本日志
 
+## 0.5.1 — 2026-10-24
+
+- 修复 CI：容器构建后工作目录归 builder 所有，后续步骤无法创建 `site/`
+
 ## 0.5.0 — 2026-10-24
 
 **改名为 nautilus-folder-yaml;ruamel.yaml 重写;双语;pacman 源;skill 独立分发**
