@@ -37,6 +37,7 @@ CAPTIONS_SCHEMA = 'org.gnome.nautilus.icon-view'
 VIEW_MODE_SCHEMA = 'org.gnome.nautilus.preferences'
 VIEW_MODE_KEY = 'default-folder-viewer'
 
+
 def _is_zh(locale):
     """界面语言是否为中文：看 locale 的完整写法，`zh_CN.UTF-8` 等。"""
     return locale.lower().startswith('zh')

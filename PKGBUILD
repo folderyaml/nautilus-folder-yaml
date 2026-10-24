@@ -1,5 +1,5 @@
 pkgname=nautilus-folder-yaml
-pkgver=0.5.2
+pkgver=0.5.3
 pkgrel=1
 pkgdesc='nautilus 插件：用 .folder.yaml 给文件夹和文件加描述'
 arch=('any')

@@ -1,5 +1,9 @@
 # 版本日志
 
+## 0.5.3 — 2026-10-24
+
+- 修复 CI：允许 `v*` tag 部署到 github-pages 环境（默认只放行 main 分支）
+
 ## 0.5.2 — 2026-10-24
 
 - 修复 CI：`repo-add` 在 Arch 容器里执行（runner 上没有 pacman 工具）
