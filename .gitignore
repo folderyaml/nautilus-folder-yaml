@@ -1,2 +1,8 @@
 __pycache__/
 *.pyc
+pkg/
+src/
+*.pkg.tar.zst
+*.pkg.tar.zst.sig
+.makepkg*
+site/

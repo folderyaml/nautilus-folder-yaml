@@ -1,5 +1,18 @@
 # 版本日志
 
+## 0.5.0 — 2026-10-24
+
+**改名为 nautilus-folder-yaml;ruamel.yaml 重写;双语;pacman 源;skill 独立分发**
+
+- 全面去掉 `nautilus-meta`:插件文件、菜单 ID(`NautilusFolderYaml::*`)、列 ID、类名、配置目录(`~/.config/nautilus-folder-yaml/`)、xattr(`user.nautilus-folder-yaml.desc`)、CSS class
+- 文案统一:文件夹与文件都叫「描述」,英文界面叫 `desc`;菜单「修改描述 / Edit desc」,开关「隐藏描述 / 显示描述」
+- YAML 写入改用 ruamel.yaml round-trip:保留注释、键序、引号、flow 风格;插件 1558 → 849 行
+- 配置合并成 `state.json`(`enabled` + `captions` 备份);去掉 `name-zh` 迁移逻辑与拖拽宽度检测
+- 新增 `PKGBUILD`、`.install`、`.github/workflows/release.yml`:打 tag 自动打包并发布到 GitHub Pages,用户配三行 pacman 源后一行安装
+- 新增 MIT LICENSE
+- skill 迁到独立仓库 `folderyaml/skills`;测试拆成 `tests/fake_gi.py` + `tests/test_plugin.py`
+- 不做旧数据迁移:旧 xattr、旧配置目录、旧 caption 名一律不管(yaml 仍是唯一真源)
+
 ## 0.4.2 — 2026-10-24
 
 **名称列按当前目录最长文件名定宽;描述字号调小**

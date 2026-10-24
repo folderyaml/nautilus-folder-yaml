@@ -1,0 +1,46 @@
+name: release
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build package
+        run: |
+          sed -i "s/^pkgver=.*/pkgver=${GITHUB_REF_NAME#v}/" PKGBUILD
+          docker run --rm -v "$PWD:/build" -w /build archlinux:base-devel bash -euc '
+            pacman -Syu --noconfirm --needed fakeroot
+            useradd -m builder && chown -R builder /build
+            su builder -c "cd /build && makepkg -f --noconfirm --nodeps"
+          '
+      - name: Make pacman repository
+        run: |
+          mkdir -p site/x86_64
+          cp *.pkg.tar.zst site/x86_64/
+          repo-add -q site/x86_64/folderyaml.db.tar.gz site/x86_64/*.pkg.tar.zst
+          # Pages 不认符号链接：先删掉 repo-add 建的同名链接，再落成实体文件
+          rm site/x86_64/folderyaml.db site/x86_64/folderyaml.files
+          cp site/x86_64/folderyaml.db.tar.gz    site/x86_64/folderyaml.db
+          cp site/x86_64/folderyaml.files.tar.gz site/x86_64/folderyaml.files
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - id: deploy
+        uses: actions/deploy-pages@v4

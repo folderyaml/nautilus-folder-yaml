@@ -1,0 +1,20 @@
+# 用户目录里的旧副本会和系统副本一起加载，菜单出现两份。
+_stop_user_copy() {
+  local uid="${PKEXEC_UID:-${SUDO_UID:-}}" home old
+  [ -n "$uid" ] || return 0
+  home=$(getent passwd "$uid" | cut -d: -f6)
+  for old in nautilus-meta.py nautilus-folder-yaml.py; do
+    old="$home/.local/share/nautilus-python/extensions/$old"
+    if [ -e "$old" ]; then
+      mv "$old" "$old.disabled"
+      echo "已停用用户副本(防双菜单): $old.disabled"
+    fi
+  done
+}
+
+post_install() {
+  _stop_user_copy
+  echo "运行 nautilus -q 或重新登录后生效。"
+}
+
+post_upgrade() { post_install; }

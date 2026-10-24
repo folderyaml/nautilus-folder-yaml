@@ -1,26 +1,15 @@
 #!/usr/bin/env bash
-# 把 nautilus-meta 插件装到用户目录,然后重启 nautilus。
-#
-# 纯插件:不需要构建、不需要 pkexec。nautilus 会加载用户目录下的扩展;
-# 两份同名副本同时存在会出现双菜单(见 docs/pitfalls.md #4),所以系统里
-# 残留的旧副本会被提示删除(需要 pkexec,不自动执行)。
+# 开发用：把插件复制到用户扩展目录并重启 nautilus。
+# 正式安装请用 pacman 包（见 README）。
 set -euo pipefail
 
-REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SRC="$REPO_ROOT/extensions/python/nautilus-meta/nautilus-meta.py"
-USER_DIR="$HOME/.local/share/nautilus-python/extensions"
-SYSTEM_COPY="/usr/share/nautilus-python/extensions/nautilus-meta.py"
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DIR="$HOME/.local/share/nautilus-python/extensions"
 
-mkdir -p "$USER_DIR"
-install -m 644 "$SRC" "$USER_DIR/nautilus-meta.py"
-echo "已安装: $USER_DIR/nautilus-meta.py"
-
-if [ -e "$SYSTEM_COPY" ]; then
-    echo
-    echo "注意:系统里还有一份旧副本 $SYSTEM_COPY"
-    echo "两份同时存在会出现重复菜单项,请执行:"
-    echo "  pkexec rm $SYSTEM_COPY"
-fi
+mkdir -p "$DIR"
+install -m 644 "$ROOT/nautilus-folder-yaml.py" "$DIR/nautilus-folder-yaml.py"
+# 旧名字的副本会让菜单出现两份（docs/pitfalls.md #4）
+[ -e "$DIR/nautilus-meta.py" ] && mv "$DIR/nautilus-meta.py" "$DIR/nautilus-meta.py.disabled"
 
 nautilus -q 2>/dev/null || true
-echo "nautilus 已重启;重新打开窗口生效。"
+echo "已安装到 $DIR/nautilus-folder-yaml.py，nautilus 已重启。"
