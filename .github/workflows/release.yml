@@ -22,6 +22,8 @@ jobs:
             useradd -m builder && chown -R builder /build
             su builder -c "cd /build && makepkg -f --noconfirm --nodeps"
           '
+          # 容器里的 builder 拥有工作目录，后面的步骤要还回来
+          sudo chown -R "$(id -u):$(id -g)" .
       - name: Make pacman repository
         run: |
           mkdir -p site/x86_64
